@@ -29,7 +29,7 @@ $AGENT_BINARY_NAME="jumpcloud-agent.exe"
 
 $AGENT_SERVICE_NAME="jumpcloud-agent"
 
-$AGENT_INSTALLER_URL="https://s3.amazonaws.com/jumpcloud-windows-agent/production/JumpCloudInstaller.exe"
+$AGENT_INSTALLER_URL="https://jumpcloud-windows-agent.s3.amazonaws.com/production/JumpCloudInstaller.exe"
 $AGENT_INSTALLER_PATH="$env:TEMP\JumpCloudInstaller.exe"
 $AGENT_UNINSTALLER_NAME="unins000.exe"
 
