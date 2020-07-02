@@ -24,6 +24,8 @@ print_list() {
 get_local_stack_names() {
   # get stack names and strip spaces and tabs from string
   stack_names=( $(/bin/grep -r -w -h '^stack_name:' ${PATH} | /usr/bin/cut -d':' -f2 | /usr/bin/tr -d '\040\011\042\047') )
+  printf "Local stack names:"
+  print_list "${stack_names[@]}" # FIXME: Delete this line
 }
 
 # Get existing stack names from cloudformation
@@ -31,6 +33,8 @@ get_cf_stack_names() {
   stack_names=( $(aws cloudformation list-stacks \
       --query 'StackSummaries[?starts_with(StackStatus, `DELETE_COMPLETE`) != `true`].StackName' \
       --output text) )
+  printf "CF stack names:"
+  print_list "${stack_names[@]}" # FIXME: Delete this line
 }
 
 # Get the newly added stack_name
@@ -38,6 +42,8 @@ get_new_stack_name() {
   # get stack name and strip spaces/tabs/new line/carriage return from string
   local diff_output=$(/usr/bin/git diff --unified=0 HEAD~1 | /bin/grep '^+stack_name:' || true)
   new_stack_name=$(/usr/bin/cut -d':' -f2 <<< ${diff_output} | /usr/bin/tr -d '\040\011\012\015\042\047')
+  printf "New stack name:"
+  printf "${new_stack_name}"
 }
 
 # Get the OwnerEmail in newly added stack name
