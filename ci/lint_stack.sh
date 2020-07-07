@@ -70,12 +70,14 @@ verify_unique() {
 
 # Verify that new stack_name contains valid chars and is a certain length
 verify_name_constraint() {
-  if [[ ! $new_stack_name =~ $STACK_NAME_CONSTRAINT ]]; then
-    printf "\e[1;31mERROR: Stack name \"${new_stack_name}\" contains invalid characters. "
-    printf "A stack name can contain only alphanumeric characters (case sensitive) and hyphens. "
-    printf "It must start with an alphabetic character and cannot be longer than 128 characters.\e[0m\n"
-    exit 1
-  fi
+  for new_stack_name in "${new_stack_names[@]}"; do
+    if [[ ! $new_stack_name =~ $STACK_NAME_CONSTRAINT ]]; then
+      printf "\e[1;31mERROR: Stack name \"${new_stack_name}\" contains invalid characters. "
+      printf "A stack name can contain only alphanumeric characters (case sensitive) and hyphens. "
+      printf "It must start with an alphabetic character and cannot be longer than 128 characters.\e[0m\n"
+      exit 1
+    fi
+  done
 }
 
 # Get the list of new or changed files
@@ -158,8 +160,8 @@ while getopts ":rl:" options; do
        # verify stack names
        get_new_stack_names
        if [ ! ${#new_stack_names[@]} -eq 0 ]; then
-         # TODO: Make the following functions work on lists
          verify_name_constraint
+         # TODO: Make the following functions work on lists
          # get all stack names from the last commit
          ( /usr/bin/git checkout HEAD~1 ) 2> /dev/null
          get_local_stack_names
