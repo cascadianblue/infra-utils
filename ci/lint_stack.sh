@@ -37,13 +37,15 @@ get_cf_stack_names() {
   print_list "${stack_names[@]}" # FIXME: Delete this line
 }
 
-# Get the newly added stack_name
-get_new_stack_name() {
+# Get names of newly-added stacks
+get_new_stack_names() {
+  new_stack_names=()
   # get stack name and strip spaces/tabs/new line/carriage return from string
-  local diff_output=$(/usr/bin/git diff --unified=0 HEAD~1 | /bin/grep '^+stack_name:' || true)
-  new_stack_name=$(/usr/bin/cut -d':' -f2 <<< ${diff_output} | /usr/bin/tr -d '\040\011\012\015\042\047')
-  printf "New stack name:"
-  printf "${new_stack_name}\n"
+  /usr/bin/git diff --unified=0 HEAD~1 | /bin/grep '^+stack_name:' | while read -r line; do
+    new_stack_names+=($(/usr/bin/cut -d':' -f2 <<< ${line} | /usr/bin/tr -d '\040\011\012\015\042\047'))
+  done
+  printf "New stack name(s):"
+  print_list "${new_stack_names[@]}"
 }
 
 # Get the OwnerEmail in newly added stack name
@@ -138,6 +140,7 @@ fi
 while getopts ":rl:" options; do
   case "${options}" in
     r) get_new_stack_name
+      # TODO: Change the following functions to work on lists; find a way to test them
        if [ ! -z "${new_stack_name}" ]; then
          verify_name_constraint
          get_cf_stack_names
@@ -153,8 +156,9 @@ while getopts ":rl:" options; do
        get_diff_files
        verify_sceptre_files
        # verify stack names
-       get_new_stack_name
-       if [ ! -z "${new_stack_name}" ]; then
+       get_new_stack_names
+       if [ ! ${#new_stack_names[@]} -eq 0 ]; then
+         # TODO: Make the following functions work on lists
          verify_name_constraint
          # get all stack names from the last commit
          ( /usr/bin/git checkout HEAD~1 ) 2> /dev/null
