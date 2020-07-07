@@ -59,12 +59,14 @@ get_owner_email() {
 verify_unique() {
   for stack_name in "${stack_names[@]}"
   do
-    if [ "${new_stack_name}" = "${stack_name}" ]; then
-      printf "\e[1;31mERROR: new stack_name \"${new_stack_name}\" is not unique\e[0m\n"
-      printf "Existing stacks names:\n"
-      print_list "${stack_names[@]}"
-      exit 1
-     fi
+    for new_stack_name in "${new_stack_names[@]}"; do
+      if [ "${new_stack_name}" = "${stack_name}" ]; then
+        printf "\e[1;31mERROR: new stack_name \"${new_stack_name}\" is not unique\e[0m\n"
+        printf "Existing stacks names:\n"
+        print_list "${stack_names[@]}"
+        exit 1
+      fi
+    done
   done
 }
 
@@ -161,7 +163,6 @@ while getopts ":rl:" options; do
        get_new_stack_names
        if [ ! ${#new_stack_names[@]} -eq 0 ]; then
          verify_name_constraint
-         # TODO: Make the following functions work on lists
          # get all stack names from the last commit
          ( /usr/bin/git checkout HEAD~1 ) 2> /dev/null
          get_local_stack_names
