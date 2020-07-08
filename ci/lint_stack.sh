@@ -45,10 +45,14 @@ get_new_stack_names() {
   /usr/bin/git diff --unified=0 HEAD~1 | /bin/grep '^+stack_name:' | while read -r line; do
     printf "breadcrumb 267\n"
     printf "line: ${line}\n"
-    new_stack_names+=($(/usr/bin/cut -d':' -f2 <<< ${line} | /usr/bin/tr -d '\040\011\012\015\042\047'))
+    local new_stack_name=$(/usr/bin/cut -d':' -f2 <<< ${line} | /usr/bin/tr -d '\040\011\012\015\042\047')
+    printf "new stack name: ${new_stack_name}"
+    new_stack_names+=(new_stack_name)
   done
   printf "New stack name(s):\n"
   print_list "${new_stack_names[@]}"
+  printf "New stack name(s)*:\n"
+  print_list "${new_stack_names[*]}"
 }
 
 # Get the OwnerEmail in newly added stack name
