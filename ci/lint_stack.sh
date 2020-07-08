@@ -44,10 +44,10 @@ get_new_stack_names() {
   # get stack name and strip spaces/tabs/new line/carriage return from string
   /usr/bin/git diff --unified=0 HEAD~1 | /bin/grep '^+stack_name:' | while read -r line; do
     printf "breadcrumb 267\n"
-    printf "line: ${line}"
+    printf "line: ${line}\n"
     new_stack_names+=($(/usr/bin/cut -d':' -f2 <<< ${line} | /usr/bin/tr -d '\040\011\012\015\042\047'))
   done
-  printf "New stack name(s):"
+  printf "New stack name(s):\n"
   print_list "${new_stack_names[@]}"
 }
 
