@@ -144,7 +144,7 @@ if [ $# -eq 0 ]; then                          # Requires at least one argument
 fi
 
 # FIXME: Delete all breadcrumbs
-printf "breadcrumb 432"
+printf "breadcrumb 432\n"
 
 while getopts ":rl:" options; do
   case "${options}" in
@@ -162,26 +162,26 @@ while getopts ":rl:" options; do
       ;;
     l) PATH=${OPTARG}
        # verify sceptre files
-       printf "breadcrumb 890"
+       printf "breadcrumb 890\n"
        get_diff_files
-       printf "breadcrumb 456"
+       printf "breadcrumb 456\n"
        verify_sceptre_files
-       printf "breadcrumb 789"
+       printf "breadcrumb 789\n"
        # verify stack names
        get_new_stack_names
-       printf "breadcrumb 294"
+       printf "breadcrumb 294\n"
        if [ ! ${#new_stack_names[@]} -eq 0 ]; then
          verify_name_constraint
-         printf "breadcrumb 453"
+         printf "breadcrumb 453\n"
          # get all stack names from the last commit
          ( /usr/bin/git checkout HEAD~1 ) 2> /dev/null
-         printf "breadcrumb 231"
+         printf "breadcrumb 231\n"
          get_local_stack_names
-         printf "breadcrumb 087"
+         printf "breadcrumb 087\n"
          ( /usr/bin/git checkout - ) 2> /dev/null
-         printf "breadcrumb 125"
+         printf "breadcrumb 125\n"
          verify_unique
-         printf "breadcrumb 000"
+         printf "breadcrumb 000\n"
        fi
       ;;
     :)                            # If expected argument omitted:
