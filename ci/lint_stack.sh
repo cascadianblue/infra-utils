@@ -137,6 +137,8 @@ exit_abnormal() {                              # Function: Exit with error.
   exit 1
 }
 
+printf "This is a test, breadcrumb 12345"
+
 if [ $# -eq 0 ]; then                          # Requires at least one argument
     exit_abnormal
 fi
