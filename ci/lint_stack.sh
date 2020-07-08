@@ -47,7 +47,7 @@ get_new_stack_names() {
     printf "line: ${line}\n"
     local new_stack_name=$(/usr/bin/cut -d':' -f2 <<< ${line} | /usr/bin/tr -d '\040\011\012\015\042\047')
     printf "new stack name: ${new_stack_name}"
-    new_stack_names+=(new_stack_name)
+    new_stack_names+=("$new_stack_name")
   done
   printf "New stack name(s):\n"
   print_list "${new_stack_names[@]}"
